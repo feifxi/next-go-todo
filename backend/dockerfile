@@ -1,11 +1,12 @@
-FROM golang:1.22-alpine
-
+FROM golang:latest AS builder
 WORKDIR /app
-COPY backend/go.mod backend/go.sum ./
+COPY . .
 RUN go mod download
+ENV CGO_ENABLED=0
+RUN go build -o myapp .
 
-COPY backend/. .
-RUN go build -o server
-
+FROM alpine:latest
+WORKDIR /app
+COPY --from=builder /app/myapp .
 EXPOSE 8080
-CMD ["./server"]
+CMD ["./myapp"]

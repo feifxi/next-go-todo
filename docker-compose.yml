@@ -1,39 +1,45 @@
 version: '3.8'
 
 services:
-  db:
+  database:
+    container_name: db
     image: postgres:latest
     restart: always
     environment:
+      POSTGRES_DB: mydatabase
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
     volumes:
       - db-data:/var/lib/postgresql/data
+    networks:
+      - my-network
     ports:
       - "5432:5432"
 
   backend:
+    container_name: be
     build:
       context: ./backend
-    depends_on:
-      - db
-    # environment:
-    #   DB_HOST: db
-    #   DB_PORT: 5432
-    #   DB_USER: myuser
-    #   DB_PASSWORD: mypass
-    #   DB_NAME: mydb
+    networks:
+      - my-network
     ports:
       - "8080:8080"
+    depends_on:
+      - database
 
   frontend:
+    container_name: fe
     build:
       context: ./frontend
-    depends_on:
-      - backend
+    networks:
+      - my-network
     ports:
       - "3000:3000"
+    depends_on:
+    - backend
 
 volumes:
   db-data:
+
+networks:
+  my-network:
