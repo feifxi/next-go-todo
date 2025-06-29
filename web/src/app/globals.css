@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.btn {
+    @apply p-1 font-bold text-white rounded-lg cursor-pointer disabled:!bg-neutral-400 disabled:cursor-not-allowed
+}
