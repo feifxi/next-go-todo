@@ -17,9 +17,9 @@ services:
       - "5432:5432"
 
   backend:
-    container_name: be
+    container_name: api
     build:
-      context: ./backend
+      context: ./api
     networks:
       - my-network
     ports:
@@ -28,9 +28,9 @@ services:
       - database
 
   frontend:
-    container_name: fe
+    container_name: web
     build:
-      context: ./frontend
+      context: ./web
     networks:
       - my-network
     ports:
